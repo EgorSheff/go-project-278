@@ -1,0 +1,10 @@
+node_modules/
+.git/
+.env
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

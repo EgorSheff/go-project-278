@@ -1,0 +1,28 @@
+version: "2"
+
+linters:
+  enable:
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - gosimple
+    - gocritic
+    - revive
+    - bodyclose
+    - noctx
+
+linters-settings:
+  revive:
+    rules:
+      - name: exported
+        disabled: true
+
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - style
+
+issues:
+  exclude-dirs:
+    - db/generated
