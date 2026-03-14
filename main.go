@@ -25,7 +25,6 @@ func main() {
 	dao := generated.New(conn)
 
 	r := gin.Default()
-	r.SetTrustedProxies(nil)
 
 	handlers.RegisterHandlers(r, dao)
 
