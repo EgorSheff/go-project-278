@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:golangci-lint.run)",
+      "WebFetch(domain:github.com)"
+    ]
+  }
+}

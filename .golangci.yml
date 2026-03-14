@@ -1,9 +1,5 @@
 version: "2"
 
-run:
-  exclude-dirs:
-    - db/generated
-
 linters:
   enable:
     - govet
@@ -26,3 +22,7 @@ linters:
       enabled-tags:
         - diagnostic
         - style
+
+  exclusions:
+    paths:
+      - db/generated
