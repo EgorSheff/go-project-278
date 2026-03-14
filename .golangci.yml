@@ -1,5 +1,9 @@
 version: "2"
 
+run:
+  exclude-dirs:
+    - db/generated
+
 linters:
   enable:
     - govet
@@ -12,17 +16,13 @@ linters:
     - bodyclose
     - noctx
 
-linters-settings:
-  revive:
-    rules:
-      - name: exported
-        disabled: true
+  settings:
+    revive:
+      rules:
+        - name: exported
+          disabled: true
 
-  gocritic:
-    enabled-tags:
-      - diagnostic
-      - style
-
-issues:
-  exclude-dirs:
-    - db/generated
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - style
