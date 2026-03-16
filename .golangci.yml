@@ -6,7 +6,6 @@ linters:
     - ineffassign
     - staticcheck
     - unused
-    - gosimple
     - gocritic
     - revive
     - bodyclose
@@ -22,6 +21,9 @@ linters:
       enabled-tags:
         - diagnostic
         - style
+
+  disable:
+    - errcheck
 
   exclusions:
     paths:

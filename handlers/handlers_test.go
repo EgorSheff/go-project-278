@@ -2,6 +2,7 @@ package handlers_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -47,7 +48,7 @@ func TestRedirect_Success(t *testing.T) {
 			AddRow(int32(1), int32(1), pgtype.Timestamp{Time: time.Now(), Valid: true}, "127.0.0.1", "", int16(307)))
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/r/abc", nil)
+	req, _ := http.NewRequestWithContext(context.Background(), "GET", "/r/abc", http.NoBody)
 	r.ServeHTTP(w, req)
 
 	if w.Code != http.StatusTemporaryRedirect {
@@ -70,7 +71,7 @@ func TestRedirect_NotFound(t *testing.T) {
 		WillReturnRows(pgxmock.NewRows([]string{"id", "original_url", "short_name"}))
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/r/unknown", nil)
+	req, _ := http.NewRequestWithContext(context.Background(), "GET", "/r/unknown", http.NoBody)
 	r.ServeHTTP(w, req)
 
 	if w.Code != http.StatusNotFound {
@@ -95,7 +96,7 @@ func TestGetLinks(t *testing.T) {
 		WillReturnRows(pgxmock.NewRows([]string{"count"}).AddRow(int64(2)))
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/links", nil)
+	req, _ := http.NewRequestWithContext(context.Background(), "GET", "/api/links", http.NoBody)
 	r.ServeHTTP(w, req)
 
 	if w.Code != http.StatusOK {
@@ -129,7 +130,7 @@ func TestCreateLink(t *testing.T) {
 	})
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("POST", "/api/links", bytes.NewBuffer(body))
+	req, _ := http.NewRequestWithContext(context.Background(), "POST", "/api/links", bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 	r.ServeHTTP(w, req)
 
@@ -158,7 +159,7 @@ func TestCreateLink_ValidationError(t *testing.T) {
 	})
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("POST", "/api/links", bytes.NewBuffer(body))
+	req, _ := http.NewRequestWithContext(context.Background(), "POST", "/api/links", bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 	r.ServeHTTP(w, req)
 
@@ -180,7 +181,7 @@ func TestGetLink(t *testing.T) {
 			AddRow(int32(1), "https://example.com", "abc"))
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/links/1", nil)
+	req, _ := http.NewRequestWithContext(context.Background(), "GET", "/api/links/1", http.NoBody)
 	r.ServeHTTP(w, req)
 
 	if w.Code != http.StatusOK {
@@ -200,7 +201,7 @@ func TestGetLink_NotFound(t *testing.T) {
 		WillReturnRows(pgxmock.NewRows([]string{"id", "original_url", "short_name"}))
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/links/999", nil)
+	req, _ := http.NewRequestWithContext(context.Background(), "GET", "/api/links/999", http.NoBody)
 	r.ServeHTTP(w, req)
 
 	if w.Code != http.StatusNotFound {
@@ -220,7 +221,7 @@ func TestDeleteLink(t *testing.T) {
 		WillReturnResult(pgxmock.NewResult("DELETE", 1))
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("DELETE", "/api/links/1", nil)
+	req, _ := http.NewRequestWithContext(context.Background(), "DELETE", "/api/links/1", http.NoBody)
 	r.ServeHTTP(w, req)
 
 	if w.Code != http.StatusNoContent {
@@ -246,7 +247,7 @@ func TestUpdateLink(t *testing.T) {
 	})
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("PUT", "/api/links/1", bytes.NewBuffer(body))
+	req, _ := http.NewRequestWithContext(context.Background(), "PUT", "/api/links/1", bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 	r.ServeHTTP(w, req)
 
@@ -272,7 +273,7 @@ func TestGetLinkVisits(t *testing.T) {
 		WillReturnRows(pgxmock.NewRows([]string{"count"}).AddRow(int64(1)))
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/api/link_visits", nil)
+	req, _ := http.NewRequestWithContext(context.Background(), "GET", "/api/link_visits", http.NoBody)
 	r.ServeHTTP(w, req)
 
 	if w.Code != http.StatusOK {
