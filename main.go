@@ -2,8 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"log"
+	"log/slog"
 	"os"
 
 	"github.com/EgorSheff/go-project-278/db/generated"
@@ -17,7 +16,7 @@ func main() {
 
 	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		slog.Error("Unable to connect to database", "err", err)
 		os.Exit(1)
 	}
 	defer conn.Close(context.Background())
@@ -29,6 +28,6 @@ func main() {
 	handlers.RegisterHandlers(r, dao)
 
 	if err := r.Run(":8080"); err != nil {
-		log.Fatalf("failed to run server: %v", err)
+		slog.Error("Run HTTP server error", "err", err)
 	}
 }

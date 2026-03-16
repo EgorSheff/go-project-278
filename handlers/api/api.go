@@ -263,7 +263,7 @@ func isUniqueViolation(err error) bool {
 
 var rangeRegexp = regexp.MustCompile(`\[(\d+),(\d+)\]`)
 
-func parseRange(c *gin.Context) (int32, int32, error) {
+func parseRange(c *gin.Context) (offset, limit int32, err error) {
 	raw := c.Query("range")
 	if raw == "" {
 		if c.GetHeader("Range") != "" {
@@ -278,18 +278,18 @@ func parseRange(c *gin.Context) (int32, int32, error) {
 		fmt.Println(match, raw, c.Request.URL.Query())
 		return 0, 0, ErrUnsupportedRangeFormat
 	}
-	offset, err := strconv.Atoi(match[1])
+	off, err := strconv.Atoi(match[1])
 	if err != nil {
 		return 0, 0, err
 	}
-	limit, err := strconv.Atoi(match[2])
+	lim, err := strconv.Atoi(match[2])
 	if err != nil {
 		return 0, 0, err
 	}
 
-	if limit > 100 || limit == 0 {
-		limit = 100
+	if lim > 100 || lim == 0 {
+		lim = 100
 	}
 
-	return int32(offset), int32(limit), nil
+	return int32(off), int32(lim), nil
 }
